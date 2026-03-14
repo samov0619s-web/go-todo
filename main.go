@@ -1,4 +1,4 @@
-package main;
+package main
 
 import (
 	"fmt"
@@ -11,5 +11,11 @@ func main() {
 	})
 
 	fmt.Println("server run on :443")
-	http.ListenAndServe(":443", nil)
+	err := http.ListenAndServeTLS(":443",
+		"/etc/xray/cert.pem",
+		"/etc/xray/key.pem",
+		nil)
+	if err != nil {
+		panic(err)
+	}
 }
