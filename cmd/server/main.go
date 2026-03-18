@@ -3,12 +3,15 @@ package main
 import (
 	"fmt"
 	"net/http"
+	"go-todo/internal/handler"
+	"go-todo/internal/storage"
 )
 
 func main() {
-	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		fmt.Fprint(w, "API run 🚀")
-	})
+	store := storage.NewMemoryStorage()
+	handler := handler.NewTodoHandler(store)
+
+	handler.RegisterRoutes()
 
 	fmt.Println("server run on :443")
 	err := http.ListenAndServeTLS(":443",
