@@ -9,15 +9,18 @@ import (
 
 func main() {
 	store := storage.NewMemoryStorage()
-	handler := handler.NewTodoHandler(store)
+	h := handler.NewTodoHandler(store)
 
-	handler.RegisterRoutes()
+	mux := http.NewServeMux()
+	h.RegisterRoutes(mux)
+
+	loggedMux := handler.LoggingMiddleware(mux)
 
 	fmt.Println("server run on :443")
 	err := http.ListenAndServeTLS(":443",
 		"/etc/xray/cert.pem",
 		"/etc/xray/key.pem",
-		nil)
+		loggedMux)
 	if err != nil {
 		panic(err)
 	}

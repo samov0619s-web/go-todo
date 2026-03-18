@@ -16,9 +16,9 @@ func NewTodoHandler(store *storage.MemoryStorage) *TodoHandler {
 	return &TodoHandler{store: store}
 }
 
-func (h *TodoHandler) RegisterRoutes() {
-	http.HandleFunc("/todos", h.handleTodos)
-	http.HandleFunc("/todos/", h.handleTodoByID)
+func (h *TodoHandler) RegisterRoutes(mux *http.ServeMux) {
+	mux.HandleFunc("/todos", h.handleTodos)
+	mux.HandleFunc("/todos/", h.handleTodoByID)
 }
 
 func (h *TodoHandler) handleTodos(w http.ResponseWriter, r *http.Request) {
